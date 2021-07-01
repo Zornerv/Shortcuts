@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragmentA">
+
+    <fragment
+        android:id="@+id/fragmentA"
+        android:name="com.zornerv.shortcuts.FragmentA"
+        android:label="FragmentA">
+        <action
+            android:id="@+id/goToB"
+            app:destination="@id/fragmentB" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentB"
+        android:name="com.zornerv.shortcuts.FragmentB"
+        android:label="FragmentB">
+        <deepLink app:uri="shortcuts://fragment_b" />
+        <action
+            android:id="@+id/goToC"
+            app:destination="@id/fragmentC" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentC"
+        android:name="com.zornerv.shortcuts.FragmentC"
+        android:label="FragmentC" />
+</navigation>
