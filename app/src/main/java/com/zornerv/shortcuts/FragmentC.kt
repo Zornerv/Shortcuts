@@ -28,9 +28,9 @@ class FragmentC : Fragment(R.layout.fragment_c) {
         Log.d(TAG, "onViewCreated: ")
 
         binding.title.text = "Fragment C uuid:${args.uuid}"
-        binding.createShortcutButton.setOnClickListener {
-            createShortcut()
-        }
+
+        binding.createShortcutButton.setOnClickListener { createShortcut() }
+        binding.checkMaxShortcutsButton.setOnClickListener { checkMaxShortcuts() }
     }
 
     private fun createShortcut() {
@@ -47,13 +47,20 @@ class FragmentC : Fragment(R.layout.fragment_c) {
                         .setIntent(intent)
                         .setIcon(icon)
                         .build()
-
                 shortcutManager.addDynamicShortcuts(listOf(shortcut))
                 showToast("Dynamic shortcut added!")
             } else {
                 showToast("Please insert an uuid for your shortcut!")
             }
         }
+    }
+
+    private fun checkMaxShortcuts() {
+        val maxShortcutsNumber = shortcutManager.maxShortcutCountPerActivity
+        showToast(
+            message = "At the time each launcher can have maximmum of $maxShortcutsNumber shortcuts",
+            longDuration = true
+        )
     }
 
     companion object {
