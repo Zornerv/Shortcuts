@@ -24,5 +24,14 @@
     <fragment
         android:id="@+id/fragmentC"
         android:name="com.zornerv.shortcuts.FragmentC"
-        android:label="FragmentC" />
+        android:label="FragmentC">
+        <argument
+            android:name="uuid"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <deepLink
+            app:action="android.intent.action.ACTION_VIEW"
+            app:uri="shortcuts://fragment_c?uuid={uuid}" />
+    </fragment>
 </navigation>
