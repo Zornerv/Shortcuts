@@ -1,10 +1,12 @@
 package com.zornerv.shortcuts
 
+import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -31,22 +33,13 @@ class FragmentC : Fragment(R.layout.fragment_c) {
 
         binding.createShortcutButton.setOnClickListener { createShortcut() }
         binding.checkMaxShortcutsButton.setOnClickListener { checkMaxShortcuts() }
+        binding.createPinnedShortcutButton.setOnClickListener { createPinnedShortcut() }
     }
 
     private fun createShortcut() {
         with(binding.input.text) {
             if (!isNullOrBlank()) {
-                val icon = Icon.createWithResource(requireContext(), R.drawable.ic_vaccine)
-                val intent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("shortcuts://fragment_c?uuid=${toString()}")
-                )
-                val shortcut =
-                    ShortcutInfo.Builder(requireContext(), "fragment_c_shortcut_id_${toString()}")
-                        .setShortLabel("Fragment C ${toString()}")
-                        .setIntent(intent)
-                        .setIcon(icon)
-                        .build()
+                val shortcut = prepareShortcutInfo()
                 shortcutManager.addDynamicShortcuts(listOf(shortcut))
                 showToast("Dynamic shortcut added!")
             } else {
@@ -63,7 +56,51 @@ class FragmentC : Fragment(R.layout.fragment_c) {
         )
     }
 
+    private fun createPinnedShortcut() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            showToast("Pinned Shortcuts are not supported on sdk below 26")
+            return
+        }
+
+        if (shortcutManager.isRequestPinShortcutSupported) {
+            val pinShortcutInfo = prepareShortcutInfo()
+            val pinnedShortcutCallbackIntent =
+                shortcutManager.createShortcutResultIntent(pinShortcutInfo)
+
+            val successCallback = PendingIntent.getBroadcast(
+                requireContext(),
+                RC_PINNED_SHORTCUT,
+                pinnedShortcutCallbackIntent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
+
+            shortcutManager.requestPinShortcut(pinShortcutInfo, successCallback.intentSender)
+        } else {
+            showToast(
+                message = "Pinned shortcuts are not supported by the default launcher",
+                longDuration = true
+            )
+        }
+    }
+
+    private fun prepareShortcutInfo(): ShortcutInfo {
+        val uuidArgument = binding.input.text.toString()
+        val id = "fragment_c_$uuidArgument"
+        val icon = Icon.createWithResource(requireContext(), R.drawable.ic_vaccine)
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("shortcuts://fragment_c?uuid=$uuidArgument")
+        )
+
+        return ShortcutInfo.Builder(requireContext(), id)
+            .setIntent(intent)
+            .setShortLabel("Fragment C ${binding.input.text}")
+            .setIcon(icon)
+            .build()
+    }
+
     companion object {
         private const val TAG = "FragmentC"
+        private const val RC_PINNED_SHORTCUT = 34
     }
 }

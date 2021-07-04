@@ -29,6 +29,16 @@
 
 
     <Button
+        android:id="@+id/createPinnedShortcutButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        android:text="Create pinned shortcut"
+        app:layout_constraintBottom_toTopOf="@id/checkMaxShortcutsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
         android:id="@+id/checkMaxShortcutsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
