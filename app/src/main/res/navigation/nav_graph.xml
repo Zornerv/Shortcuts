@@ -34,4 +34,7 @@
             app:action="android.intent.action.ACTION_VIEW"
             app:uri="shortcuts://fragment_c?uuid={uuid}" />
     </fragment>
+
+    <include app:graph="@navigation/auth" />
+
 </navigation>

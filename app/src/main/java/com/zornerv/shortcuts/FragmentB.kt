@@ -1,32 +1,34 @@
 package com.zornerv.shortcuts
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import com.zornerv.shortcuts.databinding.FragmentABinding
+import androidx.navigation.fragment.findNavController
+import com.zornerv.shortcuts.databinding.FragmentBBinding
 import com.zornerv.shortcuts.util.viewBinding
 
-class FragmentB : Fragment(R.layout.fragment_a) {
+class FragmentB : Fragment(R.layout.fragment_b) {
 
-    private val binding by viewBinding(FragmentABinding::bind)
+    private val binding by viewBinding(FragmentBBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: ")
 
-        binding.title.text = "Fragment B - Vaccine"
+        binding.button.setOnClickListener {
+            findNavController().navigate(FragmentBDirections.goToC())
+        }
 
-        with(binding.button) {
-            text = "Navigate to C"
-            setOnClickListener {
-                findNavController().navigate(FragmentBDirections.goToC())
-            }
+        binding.navigateToAuthButton.setOnClickListener {
+//            findNavController().navigate(R.id.auth)
+//            findNavController().navigate(Uri.parse("shortcutsAuth://auth_register"))
+            findNavController().navigate(Uri.parse(getString(R.string.deeplink_auth_register)))
         }
     }
 
-    companion object{
+    companion object {
         private const val TAG = "FragmentB"
     }
 
