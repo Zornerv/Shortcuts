@@ -25,6 +25,7 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
+        <activity android:name=".multiplebackstack.MultipleBackStackActivity" />
     </application>
 
 </manifest>
